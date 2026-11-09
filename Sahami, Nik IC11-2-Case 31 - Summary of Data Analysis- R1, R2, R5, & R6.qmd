@@ -16,6 +16,7 @@ execute:
 ```{r}
 #| label: setup
 #| include: false
+#| echo: false
 
 library(haven)
 library(dplyr)
@@ -49,6 +50,7 @@ The analysis table uses Q7 for R1. Q7 asks members what they think about the rat
 ```{r}
 #| label: tbl-r1
 #| tbl-cap: "Q7 opinion of the share account rate"
+#| echo: false
 
 r1_summary <- efcu |>
   summarise(
@@ -78,6 +80,7 @@ For R2, I used Q8r and Q30. Q8r measures what members think about the rates char
 ```{r}
 #| label: tbl-r2
 #| tbl-cap: "Member opinions about EFCU borrowing rates"
+#| echo: false
 
 r2_summary <- bind_rows(
   tibble(Item = "Rate charged on borrowed money", n = sum(!is.na(efcu$Q8_r)),
@@ -127,6 +130,7 @@ For R5, I looked at Q13 through Q26. Each question shows whether the member used
 ```{r}
 #| label: make-r5
 #| include: false
+#| echo: false
 
 service_names <- c(
   q13 = "Regular share account",
@@ -204,6 +208,7 @@ For R6, I looked at statement frequency, statement accuracy, confidentiality, lo
 ```{r}
 #| label: tbl-r6
 #| tbl-cap: "Ratings of EFCU operational effectiveness"
+#| echo: false
 
 r6_summary <- bind_rows(
   tibble(Item = "Statement frequency", n = sum(!is.na(efcu$q9_r)), Mean = mean(efcu$q9_r, na.rm = TRUE), SD = sd(efcu$q9_r, na.rm = TRUE)),
@@ -222,6 +227,7 @@ kable(r6_summary, digits = 2)
 
 ```{r}
 #| label: r6-tests
+#| echo: false
 
 t.test(efcu$q9_r, mu = 3)
 t.test(efcu$q10_r, mu = 3)
@@ -237,6 +243,7 @@ t.test(efcu$Q37_r, mu = 3)
 ```{r}
 #| label: tbl-r6-yes-no
 #| tbl-cap: "Yes and no responses for Q11 and Q12"
+#| echo: false
 
 q11_table <- table(efcu$q11)
 q12_table <- table(efcu$q12rc)
