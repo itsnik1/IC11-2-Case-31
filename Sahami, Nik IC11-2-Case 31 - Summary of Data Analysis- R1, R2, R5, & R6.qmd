@@ -1,0 +1,275 @@
+---
+title: "Case 31 Employees Federal Credit Union"
+subtitle: "Analysis of R1 R2 R5 and R6"
+author: "Nikolas Sahami"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    scrollable: true
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(haven)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(knitr)
+
+efcu <- read_sav("Case 31 Data_efcu_4.sav") |>
+  mutate(q12rc = if_else(q12 == 3, NA, as.numeric(q12)))
+```
+
+## Research Questions
+
+For this assignment, I analyzed the following research questions:
+
+- **R1:** Why do people join the Credit Union?
+- **R2:** Why do members use other financial institutions when they need to borrow money?
+- **R5:** How aware are members of the services offered by the Credit Union?
+- **R6:** What do members think about how effectively the Credit Union is operated?
+
+## Sample and Analysis
+
+The cleaned data file has **`r nrow(efcu)` members**. I started by looking at the frequencies and averages. After that, I used one-sample *t* tests for the scale questions and chi-square tests for the yes/no questions. For the one-sample *t* tests, I used 3 as the comparison value.
+
+# R1
+
+## Opinion of the Share Account Rate
+
+The analysis table uses Q7 for R1. Q7 asks members what they think about the rate paid on their share or savings account. The reversed variable goes from 1 = very low to 5 = very high.
+
+```{r}
+#| label: tbl-r1
+#| tbl-cap: "Q7 opinion of the share account rate"
+
+r1_summary <- efcu |>
+  summarise(
+    n = sum(!is.na(Q7_r)),
+    Mean = mean(Q7_r, na.rm = TRUE),
+    SD = sd(Q7_r, na.rm = TRUE)
+  )
+
+kable(r1_summary, digits = 2)
+
+r1_test <- t.test(efcu$Q7_r, mu = 3)
+r1_test
+```
+
+## R1 Results
+
+The average rating was **`r round(r1_summary$Mean, 2)`**, which is very close to 3, or average. The one-sample *t* test was not significant, *t*(`r round(r1_test$parameter)`) = `r round(r1_test$statistic, 2)`, *p* = `r round(r1_test$p.value, 3)`.
+
+This means members did not rate the share account rate as especially high or low. Based on Q7, the rate does not seem to be a major reason that makes the Credit Union stand out. However, Q7 does not directly ask members why they joined, so it only gives part of the answer to R1.
+
+# R2
+
+## Opinions About Borrowing Rates
+
+For R2, I used Q8r and Q30. Q8r measures what members think about the rates charged on borrowed money. Q30 asks whether they agree that the Credit Union has lower loan rates than other financial institutions.
+
+```{r}
+#| label: tbl-r2
+#| tbl-cap: "Member opinions about EFCU borrowing rates"
+
+r2_summary <- bind_rows(
+  tibble(Item = "Rate charged on borrowed money", n = sum(!is.na(efcu$Q8_r)),
+         Mean = mean(efcu$Q8_r, na.rm = TRUE), SD = sd(efcu$Q8_r, na.rm = TRUE)),
+  tibble(Item = "Loan rates are lower than competitors", n = sum(!is.na(efcu$q30)),
+         Mean = mean(efcu$q30, na.rm = TRUE), SD = sd(efcu$q30, na.rm = TRUE))
+)
+
+kable(r2_summary, digits = 2)
+
+r2_q8_test <- t.test(efcu$Q8_r, mu = 3)
+r2_q30_test <- t.test(efcu$q30, mu = 3)
+
+r2_q8_test
+r2_q30_test
+```
+
+## R2 Results
+
+The average for Q8r was **`r round(r2_summary$Mean[1], 2)`**. This was slightly above 3, but the result was not significant, *t*(`r round(r2_q8_test$parameter)`) = `r round(r2_q8_test$statistic, 2)`, *p* = `r round(r2_q8_test$p.value, 3)`.
+
+The average for Q30 was **`r round(r2_summary$Mean[2], 2)`**. This result was also not significant, *t*(`r round(r2_q30_test$parameter)`) = `r round(r2_q30_test$statistic, 2)`, *p* = `r round(r2_q30_test$p.value, 3)`.
+
+Overall, members did not clearly believe that EFCU had better loan rates than other financial institutions. This could be one reason they borrow money somewhere else. The survey questions used here do not cover every possible reason, so things like convenience or loan options could also matter.
+
+## R2 Average Ratings
+
+```{r}
+#| label: fig-r2
+#| fig-cap: "Average ratings for the two R2 items"
+#| echo: false
+
+ggplot(r2_summary, aes(x = Mean, y = reorder(Item, Mean))) +
+  geom_col(fill = "steelblue") +
+  geom_vline(xintercept = 3, linetype = "dashed") +
+  scale_x_continuous(limits = c(0, 5), breaks = 0:5) +
+  labs(x = "Mean", y = NULL) +
+  theme_minimal(base_size = 16)
+```
+
+# R5
+
+## Awareness of Credit Union Services
+
+For R5, I looked at Q13 through Q26. Each question shows whether the member used the service, knew about it but did not use it, or did not know about it.
+
+```{r}
+#| label: make-r5
+#| include: false
+
+service_names <- c(
+  q13 = "Regular share account",
+  q14 = "Special subaccounts",
+  q15 = "Christmas Club account",
+  q16 = "Individual Retirement Account",
+  q17 = "MasterCard credit card",
+  q18 = "Signature loans",
+  q19 = "New car loans",
+  q20 = "Late-model car loans",
+  q21 = "Older-model car loans",
+  q22 = "Household goods or appliance loans",
+  q23 = "Recreational loans",
+  q24 = "Share-collateralized loans",
+  q25 = "IRA loans",
+  q26 = "Line-of-credit loans"
+)
+
+r5 <- efcu |>
+  select(q13:q26) |>
+  pivot_longer(everything(), names_to = "Question", values_to = "Response") |>
+  mutate(
+    Service = service_names[Question],
+    Response = factor(Response, levels = c(1, 2, 3),
+                      labels = c("Aware and used", "Aware but not used", "Unaware"))
+  ) |>
+  count(Service, Response) |>
+  group_by(Service) |>
+  mutate(Percent = 100 * n / sum(n)) |>
+  ungroup()
+```
+
+## R5 Frequencies and Percentages {.smaller}
+
+```{r}
+#| label: tbl-r5
+#| tbl-cap: "Awareness and use of EFCU services"
+#| echo: false
+
+r5 |>
+  mutate(Result = paste0(n, " (", round(Percent, 1), "%)")) |>
+  select(Service, Response, Result) |>
+  pivot_wider(names_from = Response, values_from = Result) |>
+  kable()
+```
+
+## R5 Awareness Chart
+
+```{r}
+#| label: fig-r5
+#| fig-cap: "Awareness and use of EFCU services"
+#| echo: false
+
+ggplot(r5, aes(x = Percent, y = Service, fill = Response)) +
+  geom_col() +
+  labs(x = "Percent", y = NULL, fill = NULL) +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "bottom")
+```
+
+## R5 Results
+
+The regular share account was the most-used service at **64.8%**. MasterCard was used by **43.8%**, and line-of-credit loans were used by **37.5%**.
+
+Some services had much lower awareness. **60.9%** of members were unaware of IRA loans, **53.9%** were unaware of share-collateralized loans, and **43.0%** were unaware of recreational loans.
+
+The results show that members knew more about the basic services than the specialized loan services. EFCU could do a better job explaining the less familiar services to its members.
+
+# R6
+
+## Operational Effectiveness
+
+For R6, I looked at statement frequency, statement accuracy, confidentiality, loan processing, whether services meet member needs, loan application simplicity, and the overall rating of EFCU management.
+
+```{r}
+#| label: tbl-r6
+#| tbl-cap: "Ratings of EFCU operational effectiveness"
+
+r6_summary <- bind_rows(
+  tibble(Item = "Statement frequency", n = sum(!is.na(efcu$q9_r)), Mean = mean(efcu$q9_r, na.rm = TRUE), SD = sd(efcu$q9_r, na.rm = TRUE)),
+  tibble(Item = "Statement accuracy", n = sum(!is.na(efcu$q10_r)), Mean = mean(efcu$q10_r, na.rm = TRUE), SD = sd(efcu$q10_r, na.rm = TRUE)),
+  tibble(Item = "Personnel keep information confidential", n = sum(!is.na(efcu$q31)), Mean = mean(efcu$q31, na.rm = TRUE), SD = sd(efcu$q31, na.rm = TRUE)),
+  tibble(Item = "Prompt loan processing", n = sum(!is.na(efcu$q32)), Mean = mean(efcu$q32, na.rm = TRUE), SD = sd(efcu$q32, na.rm = TRUE)),
+  tibble(Item = "Services meet member needs", n = sum(!is.na(efcu$q33)), Mean = mean(efcu$q33, na.rm = TRUE), SD = sd(efcu$q33, na.rm = TRUE)),
+  tibble(Item = "Loan applications are simple", n = sum(!is.na(efcu$q34)), Mean = mean(efcu$q34, na.rm = TRUE), SD = sd(efcu$q34, na.rm = TRUE)),
+  tibble(Item = "Overall management and operation", n = sum(!is.na(efcu$Q37_r)), Mean = mean(efcu$Q37_r, na.rm = TRUE), SD = sd(efcu$Q37_r, na.rm = TRUE))
+)
+
+kable(r6_summary, digits = 2)
+```
+
+## R6 One-Sample Tests {.smaller}
+
+```{r}
+#| label: r6-tests
+
+t.test(efcu$q9_r, mu = 3)
+t.test(efcu$q10_r, mu = 3)
+t.test(efcu$q31, mu = 3)
+t.test(efcu$q32, mu = 3)
+t.test(efcu$q33, mu = 3)
+t.test(efcu$q34, mu = 3)
+t.test(efcu$Q37_r, mu = 3)
+```
+
+## R6 Yes or No Questions
+
+```{r}
+#| label: tbl-r6-yes-no
+#| tbl-cap: "Yes and no responses for Q11 and Q12"
+
+q11_table <- table(efcu$q11)
+q12_table <- table(efcu$q12rc)
+
+r6_yes_no <- tibble(
+  Item = c("Statements are easy to understand", "Account information is confidential"),
+  Yes = c(q11_table["1"], q12_table["1"]),
+  No = c(q11_table["2"], q12_table["2"]),
+  `Yes Percent` = c(100 * q11_table["1"] / sum(q11_table),
+                    100 * q12_table["1"] / sum(q12_table))
+)
+
+kable(r6_yes_no, digits = 1)
+
+chisq.test(q11_table, p = c(.5, .5))
+chisq.test(q12_table, p = c(.5, .5))
+```
+
+## R6 Results
+
+Most of the operational ratings were above 3 and statistically significant. The highest average was the overall rating of management and operation (**M = 4.07**). Members also gave strong ratings for confidentiality (**M = 3.95**), prompt loan processing (**M = 3.72**), and whether services met their needs (**M = 3.59**).
+
+For the yes/no questions, **97.7%** said their statements were easy to understand. Also, **69.8%** said the Credit Union kept their account information confidential. Both chi-square tests were significant.
+
+Overall, the members had a positive opinion of how EFCU was operated. Statement frequency was below 3, but 3 means “about right” for this question, so I would not treat that result the same way as the other rating questions.
+
+## Conclusion
+
+For R1, members rated the share account rate as average. For R2, they did not clearly see EFCU loan rates as better than the competition. For R5, members were aware of the main services, but many did not know about some of the specialized loans. For R6, members generally had a positive opinion of how the Credit Union was operated.
+
+The main thing I took from the results is that EFCU seems to be doing well operationally, but it could do a better job showing members the value of its rates and explaining services that are not as well known.
+
+## Appendix
+
+- GitHub repository
+- GitHub Pages
