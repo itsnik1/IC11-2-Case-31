@@ -31,72 +31,6 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      { color: #003b4f; background-color: #f1f3f5; }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span { color: #003b4f; } /* Normal */
-    code span.al { color: #ad0000; } /* Alert */
-    code span.an { color: #5e5e5e; } /* Annotation */
-    code span.at { color: #657422; } /* Attribute */
-    code span.bn { color: #ad0000; } /* BaseN */
-    code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #20794d; } /* Char */
-    code span.cn { color: #8f5902; } /* Constant */
-    code span.co { color: #5e5e5e; } /* Comment */
-    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
-    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
-    code span.dt { color: #ad0000; } /* DataType */
-    code span.dv { color: #ad0000; } /* DecVal */
-    code span.er { color: #ad0000; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #ad0000; } /* Float */
-    code span.fu { color: #4758ab; } /* Function */
-    code span.im { color: #00769e; } /* Import */
-    code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
-    code span.op { color: #5e5e5e; } /* Operator */
-    code span.ot { color: #003b4f; } /* Other */
-    code span.pp { color: #ad0000; } /* Preprocessor */
-    code span.sc { color: #5e5e5e; } /* SpecialChar */
-    code span.ss { color: #20794d; } /* SpecialString */
-    code span.st { color: #20794d; } /* String */
-    code span.va { color: #111111; } /* Variable */
-    code span.vs { color: #20794d; } /* VerbatimString */
-    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="Sahami, Nik IC11-2-Case 31 - Summary of Data Analysis- R1, R2, R5, &amp; R6_files/libs/revealjs/dist/theme/quarto-0427d8d92a431aa6a6430e53ec02a470.css">
   <link href="Sahami, Nik IC11-2-Case 31 - Summary of Data Analysis- R1, R2, R5, &amp; R6_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -232,16 +166,6 @@ Nikolas Sahami
 <h2>Opinion of the Share Account Rate</h2>
 <p>The analysis table uses Q7 for R1. Q7 asks members what they think about the rate paid on their share or savings account. The reversed variable goes from 1 = very low to 5 = very high.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>r1_summary <span class="ot">&lt;-</span> efcu <span class="sc">|&gt;</span></span>
-<span id="cb1-2"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb1-3"><a href=""></a>    <span class="at">n =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(Q7_r)),</span>
-<span id="cb1-4"><a href=""></a>    <span class="at">Mean =</span> <span class="fu">mean</span>(Q7_r, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb1-5"><a href=""></a>    <span class="at">SD =</span> <span class="fu">sd</span>(Q7_r, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-6"><a href=""></a>  )</span>
-<span id="cb1-7"><a href=""></a></span>
-<span id="cb1-8"><a href=""></a><span class="fu">kable</span>(r1_summary, <span class="at">digits =</span> <span class="dv">2</span>)</span>
-<span id="cb1-9"><a href=""></a>r1_test <span class="ot">&lt;-</span> <span class="fu">t.test</span>(efcu<span class="sc">$</span>Q7_r, <span class="at">mu =</span> <span class="dv">3</span>)</span>
-<span id="cb1-10"><a href=""></a>r1_test</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     One Sample t-test
@@ -298,18 +222,6 @@ Table&nbsp;1: Q7 opinion of the share account rate
 <h2>Opinions About Borrowing Rates</h2>
 <p>For R2, I used Q8r and Q30. Q8r measures what members think about the rates charged on borrowed money. Q30 asks whether they agree that the Credit Union has lower loan rates than other financial institutions.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>r2_summary <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
-<span id="cb3-2"><a href=""></a>  <span class="fu">tibble</span>(<span class="at">Item =</span> <span class="st">"Rate charged on borrowed money"</span>, <span class="at">n =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(efcu<span class="sc">$</span>Q8_r)),</span>
-<span id="cb3-3"><a href=""></a>         <span class="at">Mean =</span> <span class="fu">mean</span>(efcu<span class="sc">$</span>Q8_r, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">SD =</span> <span class="fu">sd</span>(efcu<span class="sc">$</span>Q8_r, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb3-4"><a href=""></a>  <span class="fu">tibble</span>(<span class="at">Item =</span> <span class="st">"Loan rates are lower than competitors"</span>, <span class="at">n =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(efcu<span class="sc">$</span>q30)),</span>
-<span id="cb3-5"><a href=""></a>         <span class="at">Mean =</span> <span class="fu">mean</span>(efcu<span class="sc">$</span>q30, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">SD =</span> <span class="fu">sd</span>(efcu<span class="sc">$</span>q30, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb3-6"><a href=""></a>)</span>
-<span id="cb3-7"><a href=""></a></span>
-<span id="cb3-8"><a href=""></a><span class="fu">kable</span>(r2_summary, <span class="at">digits =</span> <span class="dv">2</span>)</span>
-<span id="cb3-9"><a href=""></a>r2_q8_test <span class="ot">&lt;-</span> <span class="fu">t.test</span>(efcu<span class="sc">$</span>Q8_r, <span class="at">mu =</span> <span class="dv">3</span>)</span>
-<span id="cb3-10"><a href=""></a>r2_q30_test <span class="ot">&lt;-</span> <span class="fu">t.test</span>(efcu<span class="sc">$</span>q30, <span class="at">mu =</span> <span class="dv">3</span>)</span>
-<span id="cb3-11"><a href=""></a></span>
-<span id="cb3-12"><a href=""></a>r2_q8_test</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     One Sample t-test
@@ -323,7 +235,6 @@ sample estimates:
 mean of x 
  3.140187 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>r2_q30_test</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     One Sample t-test
@@ -534,17 +445,6 @@ Figure&nbsp;2: Awareness and use of EFCU services
 <h2>Operational Effectiveness</h2>
 <p>For R6, I looked at statement frequency, statement accuracy, confidentiality, loan processing, whether services meet member needs, loan application simplicity, and the overall rating of EFCU management.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>r6_summary <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
-<span id="cb7-2"><a href=""></a>  <span class="fu">tibble</span>(<span class="at">Item =</span> <span class="st">"Statement frequency"</span>, <span class="at">n =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(efcu<span class="sc">$</span>q9_r)), <span class="at">Mean =</span> <span class="fu">mean</span>(efcu<span class="sc">$</span>q9_r, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">SD =</span> <span class="fu">sd</span>(efcu<span class="sc">$</span>q9_r, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb7-3"><a href=""></a>  <span class="fu">tibble</span>(<span class="at">Item =</span> <span class="st">"Statement accuracy"</span>, <span class="at">n =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(efcu<span class="sc">$</span>q10_r)), <span class="at">Mean =</span> <span class="fu">mean</span>(efcu<span class="sc">$</span>q10_r, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">SD =</span> <span class="fu">sd</span>(efcu<span class="sc">$</span>q10_r, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb7-4"><a href=""></a>  <span class="fu">tibble</span>(<span class="at">Item =</span> <span class="st">"Personnel keep information confidential"</span>, <span class="at">n =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(efcu<span class="sc">$</span>q31)), <span class="at">Mean =</span> <span class="fu">mean</span>(efcu<span class="sc">$</span>q31, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">SD =</span> <span class="fu">sd</span>(efcu<span class="sc">$</span>q31, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb7-5"><a href=""></a>  <span class="fu">tibble</span>(<span class="at">Item =</span> <span class="st">"Prompt loan processing"</span>, <span class="at">n =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(efcu<span class="sc">$</span>q32)), <span class="at">Mean =</span> <span class="fu">mean</span>(efcu<span class="sc">$</span>q32, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">SD =</span> <span class="fu">sd</span>(efcu<span class="sc">$</span>q32, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb7-6"><a href=""></a>  <span class="fu">tibble</span>(<span class="at">Item =</span> <span class="st">"Services meet member needs"</span>, <span class="at">n =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(efcu<span class="sc">$</span>q33)), <span class="at">Mean =</span> <span class="fu">mean</span>(efcu<span class="sc">$</span>q33, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">SD =</span> <span class="fu">sd</span>(efcu<span class="sc">$</span>q33, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb7-7"><a href=""></a>  <span class="fu">tibble</span>(<span class="at">Item =</span> <span class="st">"Loan applications are simple"</span>, <span class="at">n =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(efcu<span class="sc">$</span>q34)), <span class="at">Mean =</span> <span class="fu">mean</span>(efcu<span class="sc">$</span>q34, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">SD =</span> <span class="fu">sd</span>(efcu<span class="sc">$</span>q34, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb7-8"><a href=""></a>  <span class="fu">tibble</span>(<span class="at">Item =</span> <span class="st">"Overall management and operation"</span>, <span class="at">n =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(efcu<span class="sc">$</span>Q37_r)), <span class="at">Mean =</span> <span class="fu">mean</span>(efcu<span class="sc">$</span>Q37_r, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">SD =</span> <span class="fu">sd</span>(efcu<span class="sc">$</span>Q37_r, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb7-9"><a href=""></a>)</span>
-<span id="cb7-10"><a href=""></a></span>
-<span id="cb7-11"><a href=""></a><span class="fu">kable</span>(r6_summary, <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="tbl-r6" class="cell quarto-float quarto-figure quarto-figure-center">
 <figure class="quarto-float quarto-float-tbl">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-r6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -615,7 +515,6 @@ Table&nbsp;4: Ratings of EFCU operational effectiveness
 <section id="r6-one-sample-tests" class="slide level2 smaller">
 <h2>R6 One-Sample Tests</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">t.test</span>(efcu<span class="sc">$</span>q9_r, <span class="at">mu =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     One Sample t-test
@@ -629,7 +528,6 @@ sample estimates:
 mean of x 
  2.773438 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">t.test</span>(efcu<span class="sc">$</span>q10_r, <span class="at">mu =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     One Sample t-test
@@ -643,7 +541,6 @@ sample estimates:
 mean of x 
   3.46875 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="fu">t.test</span>(efcu<span class="sc">$</span>q31, <span class="at">mu =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     One Sample t-test
@@ -657,7 +554,6 @@ sample estimates:
 mean of x 
  3.945312 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">t.test</span>(efcu<span class="sc">$</span>q32, <span class="at">mu =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     One Sample t-test
@@ -671,7 +567,6 @@ sample estimates:
 mean of x 
   3.71875 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">t.test</span>(efcu<span class="sc">$</span>q33, <span class="at">mu =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     One Sample t-test
@@ -685,7 +580,6 @@ sample estimates:
 mean of x 
   3.59375 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="fu">t.test</span>(efcu<span class="sc">$</span>q34, <span class="at">mu =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     One Sample t-test
@@ -699,7 +593,6 @@ sample estimates:
 mean of x 
  3.460938 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="fu">t.test</span>(efcu<span class="sc">$</span>Q37_r, <span class="at">mu =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     One Sample t-test
@@ -718,19 +611,6 @@ mean of x
 <section id="r6-yes-or-no-questions" class="slide level2">
 <h2>R6 Yes or No Questions</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>q11_table <span class="ot">&lt;-</span> <span class="fu">table</span>(efcu<span class="sc">$</span>q11)</span>
-<span id="cb22-2"><a href=""></a>q12_table <span class="ot">&lt;-</span> <span class="fu">table</span>(efcu<span class="sc">$</span>q12rc)</span>
-<span id="cb22-3"><a href=""></a></span>
-<span id="cb22-4"><a href=""></a>r6_yes_no <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb22-5"><a href=""></a>  <span class="at">Item =</span> <span class="fu">c</span>(<span class="st">"Statements are easy to understand"</span>, <span class="st">"Account information is confidential"</span>),</span>
-<span id="cb22-6"><a href=""></a>  <span class="at">Yes =</span> <span class="fu">c</span>(q11_table[<span class="st">"1"</span>], q12_table[<span class="st">"1"</span>]),</span>
-<span id="cb22-7"><a href=""></a>  <span class="at">No =</span> <span class="fu">c</span>(q11_table[<span class="st">"2"</span>], q12_table[<span class="st">"2"</span>]),</span>
-<span id="cb22-8"><a href=""></a>  <span class="st">`</span><span class="at">Yes Percent</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">100</span> <span class="sc">*</span> q11_table[<span class="st">"1"</span>] <span class="sc">/</span> <span class="fu">sum</span>(q11_table),</span>
-<span id="cb22-9"><a href=""></a>                    <span class="dv">100</span> <span class="sc">*</span> q12_table[<span class="st">"1"</span>] <span class="sc">/</span> <span class="fu">sum</span>(q12_table))</span>
-<span id="cb22-10"><a href=""></a>)</span>
-<span id="cb22-11"><a href=""></a></span>
-<span id="cb22-12"><a href=""></a><span class="fu">kable</span>(r6_yes_no, <span class="at">digits =</span> <span class="dv">1</span>)</span>
-<span id="cb22-13"><a href=""></a><span class="fu">chisq.test</span>(q11_table, <span class="at">p =</span> <span class="fu">c</span>(.<span class="dv">5</span>, .<span class="dv">5</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Chi-squared test for given probabilities
@@ -738,7 +618,6 @@ mean of x
 data:  q11_table
 X-squared = 116.28, df = 1, p-value &lt; 2.2e-16</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a><span class="fu">chisq.test</span>(q12_table, <span class="at">p =</span> <span class="fu">c</span>(.<span class="dv">5</span>, .<span class="dv">5</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Chi-squared test for given probabilities
