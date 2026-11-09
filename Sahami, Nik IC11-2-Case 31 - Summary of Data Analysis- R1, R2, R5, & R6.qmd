@@ -271,5 +271,5 @@ The main thing I took from the results is that EFCU seems to be doing well opera
 
 ## Appendix
 
-- GitHub repository
-- GitHub Pages
+- [GitHub repository](https://github.com/itsnik1/IC11-2-Case-31)
+- [GitHub Pages](https://itsnik1.github.io/IC11-2-Case-31/)
